@@ -1,0 +1,21 @@
+#!/usr/bin/env bash
+
+source .env
+export DOCKER_IMAGE \
+    MYSQL_HOSTNAME \
+    MYSQL_DATABASE \
+    MYSQL_USERNAME \
+    MYSQL_PASSWORD
+
+docker run -it --rm \
+    -e MYSQL_HOSTNAME=$MYSQL_HOSTNAME \
+    -e MYSQL_DATABASE=$MYSQL_DATABASE \
+    -e MYSQL_USERNAME=$MYSQL_USERNAME \
+    -e MYSQL_PASSWORD=$MYSQL_PASSWORD \
+    -v $PWD/db:/app/db \
+    -v $PWD/phinx.php:/app/phinx.php \
+    $DOCKER_IMAGE \
+    vendor/bin/phinx $@
+
+# To let current user modify created files
+sudo chown -R $USER:$USER .
